@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>PrimitiveField - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a><ul class='methods'><li data-type='method'><a href="App.html#addType">addType</a></li></ul></li><li><a href="Berryfi.html">Berryfi</a><ul class='methods'><li data-type='method'><a href="Berryfi.html#pull">pull</a></li><li data-type='method'><a href="Berryfi.html#req">req</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#filter">filter</a></li><li data-type='method'><a href="Collection.html#find">find</a></li><li data-type='method'><a href="Collection.html#map">map</a></li></ul></li><li><a href="Entity.html">Entity</a><ul class='methods'><li data-type='method'><a href="Entity.html#toObject">toObject</a></li></ul></li><li><a href="Field.html">Field</a><ul class='methods'><li data-type='method'><a href="Field.html#toObject">toObject</a></li><li data-type='method'><a href="Field.html#validateProperties">validateProperties</a></li></ul></li><li><a href="PrimitiveField.html">PrimitiveField</a><ul class='methods'><li data-type='method'><a href="PrimitiveField.html#toFibery">toFibery</a></li></ul></li><li><a href="Type.html">Type</a><ul class='methods'><li data-type='method'><a href="Type.html#addField">addField</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#RestrictedAppNames">RestrictedAppNames</a></li><li><a href="global.html#toFibery">toFibery</a></li><li><a href="global.html#types">types</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">PrimitiveField</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        PrimitiveField
+        </h2>
+        
+            <div class="class-description usertext">Represents a native or primitive field in Fibery</div>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="PrimitiveField"><span class="type-signature"></span>new PrimitiveField<span class="signature">(data)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Fibery name of this primitive</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of this primitive</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Fibery type of this primitive</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>meta</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Fibery meta for this primitive</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    Creates a new primitive field
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The data directfly from Fibery</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="collection"><span class="type-signature"></span>collection<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/collection?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="color"><span class="type-signature"></span>color<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    String - Returns 'fibery/meta' → 'ui/color' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="defaultValue"><span class="type-signature"></span>defaultValue<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    String|Object - Returns 'fibery/meta' → 'fibery/default-value' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="domain"><span class="type-signature"></span>domain<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/domain?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="hasModificationDate"><span class="type-signature"></span>hasModificationDate<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/modification-date?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="icon"><span class="type-signature"></span>icon<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line178">line 178</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    String - Returns 'fibery/meta' → 'ui/mixin-icon' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="isId"><span class="type-signature"></span>isId<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/id?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="isPublicId"><span class="type-signature"></span>isPublicId<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line90">line 90</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/public-id?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="isSecure"><span class="type-signature"></span>isSecure<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/secure?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="mixin"><span class="type-signature"></span>mixin<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line154">line 154</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'app/mixin?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="mixinCreateRelation"><span class="type-signature"></span>mixinCreateRelation<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line170">line 170</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'app/mixin-create-relation?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="mixins"><span class="type-signature"></span>mixins<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line146">line 146</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Object - Returns 'fibery/meta' → 'app/mixins' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="objectEditorOrder"><span class="type-signature"></span>objectEditorOrder<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Number - Returns 'fibery/meta' → 'ui/object-editor-order' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="precision"><span class="type-signature"></span>precision<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'ui/precision' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="primitive"><span class="type-signature"></span>primitive<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line114">line 114</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/primitive?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="readOnly"><span class="type-signature"></span>readOnly<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/readonly?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="relation"><span class="type-signature"></span>relation<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    String - Returns 'fibery/meta' → 'fibery/relation' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="required"><span class="type-signature"></span>required<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/required?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="showInMenu"><span class="type-signature"></span>showInMenu<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line186">line 186</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'ui/show-in-menu?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="title"><span class="type-signature"></span>title<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line74">line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'ui/title?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="unique"><span class="type-signature"></span>unique<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Boolean - Returns 'fibery/meta' → 'fibery/unique?' value
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="unit"><span class="type-signature"></span>unit<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line130">line 130</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    String - Returns 'fibery/meta' → 'ui/number-unit' value
+</div>
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="toFibery"><span class="type-signature"></span>toFibery<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="struct_PrimitiveField.js.html">struct/PrimitiveField.js</a>, <a href="struct_PrimitiveField.js.html#line218">line 218</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Object - Converts the Primitive to use Fibery's native layout
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const data = primitive.toFibery();console.log(data);/*{	"fibery/name": "fibery/modification-date",	"fibery/type": "fibery/date-time",	"fibery/meta": {	    "fibery/modification-date?": true,	    "fibery/required?": true,	    "fibery/readonly?": true,	    "fibery/default-value": "$now",	    "fibery/secured?": false	},	"fibery/id": "de64a8e4-a781-11ea-a8a7-539d334de305"}</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Jun 06 2020 20:24:34 GMT+0200 (GMT+02:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

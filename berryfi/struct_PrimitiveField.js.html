@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>struct/PrimitiveField.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a><ul class='methods'><li data-type='method'><a href="App.html#addType">addType</a></li></ul></li><li><a href="Berryfi.html">Berryfi</a><ul class='methods'><li data-type='method'><a href="Berryfi.html#pull">pull</a></li><li data-type='method'><a href="Berryfi.html#req">req</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#filter">filter</a></li><li data-type='method'><a href="Collection.html#find">find</a></li><li data-type='method'><a href="Collection.html#map">map</a></li></ul></li><li><a href="Entity.html">Entity</a><ul class='methods'><li data-type='method'><a href="Entity.html#toObject">toObject</a></li></ul></li><li><a href="Field.html">Field</a><ul class='methods'><li data-type='method'><a href="Field.html#toObject">toObject</a></li><li data-type='method'><a href="Field.html#validateProperties">validateProperties</a></li></ul></li><li><a href="PrimitiveField.html">PrimitiveField</a><ul class='methods'><li data-type='method'><a href="PrimitiveField.html#toFibery">toFibery</a></li></ul></li><li><a href="Type.html">Type</a><ul class='methods'><li data-type='method'><a href="Type.html#addField">addField</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#RestrictedAppNames">RestrictedAppNames</a></li><li><a href="global.html#toFibery">toFibery</a></li><li><a href="global.html#types">types</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/PrimitiveField.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Represents a native or primitive field in Fibery
+ * @prop {string} name The Fibery name of this primitive
+ * @prop {string} id The ID of this primitive
+ * @prop {string} type The Fibery type of this primitive
+ * @prop {object} meta The Fibery meta for this primitive
+ */
+class PrimitiveField {
+	/**
+	 * Creates a new primitive field
+	 * @param {object} data The data directfly from Fibery
+	 */
+	constructor(data) {
+		if (!data) throw new Error("Missing data");
+		this.name = data["fibery/name"];
+		this.type = data["fibery/type"];
+		this.meta = data["fibery/meta"];
+		this.id = data["fibery/id"];
+	}
+
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/secure?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get isSecure() {
+		return this.meta["fibery/secure?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/modification-date?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get hasModificationDate() {
+		return this.meta["fibery/modification-date?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/id?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get isId() {
+		return this.meta["fibery/id?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/readonly?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get readOnly() {
+		return this.meta["fibery/readonly?"];
+	}
+	/**
+	 * String|Object - Returns 'fibery/meta' → 'fibery/default-value' value
+	 * @public
+	 * @returns {string|object}
+	 */
+	get defaultValue() {
+		return this.meta["fibery/default-value"];
+	}
+	/**
+	 * Number - Returns 'fibery/meta' → 'ui/object-editor-order' value
+	 * @public
+	 * @returns {number}
+	 */
+	get objectEditorOrder() {
+		return this.meta["ui/object-editor-order"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'ui/title?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get title() {
+		return this.meta["ui/title?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/required?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get required() {
+		return this.meta["fibery/required?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/public-id?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get isPublicId() {
+		return this.meta["fibery/public-id?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/collection?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get collection() {
+		return this.meta["fibery/collection?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'fibery/relation' value
+	 * @public
+	 * @returns {string}
+	 */
+	get relation() {
+		return this.meta["fibery/relation"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/primitive?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get primitive() {
+		return this.meta["fibery/primitive?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/domain?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get domain() {
+		return this.meta["fibery/domain?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'ui/number-unit' value
+	 * @public
+	 * @returns {string}
+	 */
+	get unit() {
+		return this.meta["ui/number-unit"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'ui/precision' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get precision() {
+		return this.meta["ui/precision"];
+	}
+	/**
+	 * Object - Returns 'fibery/meta' → 'app/mixins' value
+	 * @public
+	 * @returns {object}
+	 */
+	get mixins() {
+		return this.meta["app/mixins"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'app/mixin?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get mixin() {
+		return this.meta["app/mixin?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'ui/color' value
+	 * @public
+	 * @returns {string}
+	 */
+	get color() {
+		return this.meta["ui/color"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'app/mixin-create-relation?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get mixinCreateRelation() {
+		return this.meta["app/mixin-create-relation?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'ui/mixin-icon' value
+	 * @public
+	 * @returns {string}
+	 */
+	get icon() {
+		return this.meta["ui/mixin-icon"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'ui/show-in-menu?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get showInMenu() {
+		return this.meta["ui/show-in-menu?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/unique?' value
+	 * @public
+	 * @returns {boolean}
+	 */
+	get unique() {
+		return this.meta["fibery/unique?"];
+	}
+
+	/**
+	 * Object - Converts the Primitive to use Fibery's native layout
+	 * @returns {object}
+	 * @public
+	 * @example const data = primitive.toFibery();
+	 * console.log(data);
+	 * /*
+	 * {
+	 *	"fibery/name": "fibery/modification-date",
+	 *	"fibery/type": "fibery/date-time",
+	 *	"fibery/meta": {
+	 *	    "fibery/modification-date?": true,
+	 *	    "fibery/required?": true,
+	 *	    "fibery/readonly?": true,
+	 *	    "fibery/default-value": "$now",
+	 *	    "fibery/secured?": false
+	 *	},
+	 *	"fibery/id": "de64a8e4-a781-11ea-a8a7-539d334de305"
+     * }
+	 */
+	toFibery() {
+		return {
+			"fibery/name": this.name,
+			"fibery/type": this.type,
+			"fibery/meta": this.meta,
+			"fibery/id": this.id
+		};
+	}
+};
+module.exports = PrimitiveField;</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Jun 06 2020 20:24:34 GMT+0200 (GMT+02:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>BaseType.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a><ul class='methods'><li data-type='method'><a href="App.html#append">append</a></li><li data-type='method'><a href="App.html#toFibery">toFibery</a></li></ul></li><li><a href="BaseType.html">BaseType</a><ul class='methods'><li data-type='method'><a href="BaseType.html#toFibery">toFibery</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#filter">filter</a></li><li data-type='method'><a href="Collection.html#find">find</a></li><li data-type='method'><a href="Collection.html#map">map</a></li></ul></li><li><a href="Entity.html">Entity</a><ul class='methods'><li data-type='method'><a href="Entity.html#findFieldName">findFieldName</a></li><li data-type='method'><a href="Entity.html#pull">pull</a></li><li data-type='method'><a href="Entity.html#toObject">toObject</a></li><li data-type='method'><a href="Entity.html#validate">validate</a></li></ul></li><li><a href="Field.html">Field</a><ul class='methods'><li data-type='method'><a href="Field.html#toFibery">toFibery</a></li></ul></li><li><a href="Type.html">Type</a><ul class='methods'><li data-type='method'><a href="Type.html#append">append</a></li><li data-type='method'><a href="Type.html#insert">insert</a></li><li data-type='method'><a href="Type.html#makeEntity">makeEntity</a></li><li data-type='method'><a href="Type.html#toFibery">toFibery</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#PRIMITIVE_FIELD_TYPES">PRIMITIVE_FIELD_TYPES</a></li><li><a href="global.html#RESTRICTED_APP_NAMES">RESTRICTED_APP_NAMES</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">BaseType.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const path = require("path");
+const Berryfi = require("../Berryfi");
+
+/**
+ * Represents a native or primitive field in Fibery
+ * @prop {Berryfi} berryfi The Berryfi client instance. Circular reference.
+ * @prop {string} name The Fibery name of this type. 'some/name'
+ * @prop {object} meta The Fibery meta of this type
+ * @prop {string} id The ID of this tupe. If App, ID is the app's label.
+ * @prop {number} flag The flag value for this type
+ * @prop {string} label A readable name, often the one shown in Fibery's UI
+ * @prop {string} [type] The Fibery type. Only present in Fields.
+ * @prop {Array&lt;object>} [fields] The Fibery Fields array if this is a non-primitive Type.
+ */
+class BaseType {
+	/**
+	 * Creates a new primitive field
+	 * @param {Berryfi} berryfi The Berryfi client
+	 * @param {object} data The data directfly from Fibery
+	 */
+	constructor(berryfi, data) {
+		if (!berryfi) throw new Error("Missing berryfi");
+		if (!berryfi.constructor.name === "Berryfi") throw new TypeError("Parameter must be of the instance of Berryfi");
+		this.berryfi = berryfi;
+		this.name = data["fibery/name"] ? data["fibery/name"] : data["fibery/Name"] ? data["fibery/Name"] : data[`${Object.keys(data)[0].split("/")[0]}/Name`] ? data[`${Object.keys(data)[0].split("/")[0]}/Name`] : data;
+		this.meta = data &amp;&amp; data["fibery/meta"] ? data["fibery/meta"] : undefined;
+		this.type = data &amp;&amp; data["fibery/type"] ? data["fibery/type"] : undefined;
+		this.fields = data &amp;&amp; data["fibery/fields"] ? data["fibery/fields"] : undefined;
+		this.id = data &amp;&amp; (data["fibery/id"]||data["fibery/name"]) ? data["fibery/id"]||data["fibery/name"] : undefined;
+		this.label = !this.name ? "undefined" : this.name.includes("/") ? path.basename(this.name) : this.name;
+		
+		/**
+		 * The flags value for this thing. Is set when loaded by Berryfi.pull()
+		 * @type {number}
+		 * @public
+		 * @abstract
+		 */
+		this.flag = undefined;
+	}
+
+	/**
+	 * Boolean - Check if this is a user created App
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isApp() {
+		return !!(this.berryfi.flags.app &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Type inside an App
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isType() {
+		return !!(this.berryfi.flags.type &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a field inside a Type
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isField() {
+		return !!(this.berryfi.flags.field &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is an entity
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isEntity() {
+		return !!(this.berryfi.flags.entity &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this type is directly created by a user
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isUserCreated() {
+		return !!(this.berryfi.flags.userCreated &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Fibery helper type
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isAuxiliaryType() {
+		return !!(this.berryfi.flags.auxiliaryType &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Fibery helper field
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isAuxiliaryField() {
+		return !!(this.berryfi.flags.auxiliaryField &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Fibery helper type or field
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isAuxiliary() {
+		return !!(this.berryfi.flags.auxiliaryField|this.berryfi.flags.auxiliaryType &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a primitive Fibery type
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isPrimitive() {
+		return !!(this.berryfi.flags.primitive &amp; this.flag);
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/secure?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isSecure() {
+		return this.meta["fibery/secure?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/modification-date?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get hasModificationDate() {
+		return this.meta["fibery/modification-date?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/id?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isId() {
+		return this.meta["fibery/id?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/readonly?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get readOnly() {
+		return this.meta["fibery/readonly?"];
+	}
+	/**
+	 * String|Object - Returns 'fibery/meta' → 'fibery/default-value' value
+	 * @public
+	 * @type {string}
+	 * @returns {string|object}
+	 */
+	get defaultValue() {
+		return this.meta["fibery/default-value"];
+	}
+	/**
+	 * Number - Returns 'fibery/meta' → 'ui/object-editor-order' value
+	 * @public
+	 * @type {number}
+	 * @returns {number}
+	 */
+	get objectEditorOrder() {
+		return this.meta["ui/object-editor-order"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'ui/title?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get title() {
+		return this.meta["ui/title?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/required?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get required() {
+		return this.meta["fibery/required?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/public-id?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isPublicId() {
+		return this.meta["fibery/public-id?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/collection?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get collection() {
+		return this.meta["fibery/collection?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'fibery/relation' value
+	 * @public
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get relation() {
+		return this.meta["fibery/relation"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/primitive?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get primitive() {
+		return this.meta["fibery/primitive?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/domain?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get domain() {
+		return this.meta["fibery/domain?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'ui/number-unit' value
+	 * @public
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get unit() {
+		return this.meta["ui/number-unit"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'ui/precision' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get precision() {
+		return this.meta["ui/precision"];
+	}
+	/**
+	 * Object - Returns 'fibery/meta' → 'app/mixins' value
+	 * @public
+	 * @type {object}
+	 * @returns {object}
+	 */
+	get mixins() {
+		return this.meta["app/mixins"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'app/mixin?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get mixin() {
+		return this.meta["app/mixin?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'ui/color' value
+	 * @public
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get color() {
+		return this.meta["ui/color"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'app/mixin-create-relation?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get mixinCreateRelation() {
+		return this.meta["app/mixin-create-relation?"];
+	}
+	/**
+	 * String - Returns 'fibery/meta' → 'ui/mixin-icon' value
+	 * @public
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get icon() {
+		return this.meta["ui/mixin-icon"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'ui/show-in-menu?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get showInMenu() {
+		return this.meta["ui/show-in-menu?"];
+	}
+	/**
+	 * Boolean - Returns 'fibery/meta' → 'fibery/unique?' value
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get unique() {
+		return this.meta["fibery/unique?"];
+	}
+	/**
+	 * Date - Returns the creation date, based on the ID (UUID v1)
+	 * @public
+	 * @type {Date}
+	 * @returns {Date}
+	 */
+	get created() {
+		return this.berryfi.toDate(this.id);
+	}
+
+	/**
+	 * Converts the data of this to a valid Fibery schema
+	 * @returns {object}
+	 * @public
+	 * @example const data = primitive.toFibery();
+	 * console.log(data);
+	 * /*
+	 * {
+	 *	"fibery/name": "fibery/modification-date",
+	 *	"fibery/type": "fibery/date-time",
+	 *	"fibery/meta": {
+	 *	    "fibery/modification-date?": true,
+	 *	    "fibery/required?": true,
+	 *	    "fibery/readonly?": true,
+	 *	    "fibery/default-value": "$now",
+	 *	    "fibery/secured?": false
+	 *	},
+	 *	"fibery/id": "de64a8e4-a781-11ea-a8a7-539d334de305"
+     * }
+	 */
+	toFibery() {
+		if (this.isApp) throw new Error(`Apps are not eligible for Fibery conversion as they are inheritly just a concept`);
+		let o = Object();
+
+		if (this.isEntity) return this.data;
+		if (this.isType || this.isAuxiliary) return {
+			"fibery/name": this.name,
+			"fibery/fields": this.fields || [],
+			"fibery/meta": this.meta || {},
+			"fibery/id": this.id
+		};
+		if (this.isField || this.isPrimitive) return {
+			"fibery/name": this.name,
+			"fibery/type": this.type,
+			"fibery/meta": this.meta || {},
+			"fibery/id": this.id
+		};
+	}
+};
+module.exports = BaseType;</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Jun 07 2020 17:25:21 GMT+0200 (GMT+02:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

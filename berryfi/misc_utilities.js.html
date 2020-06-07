@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>misc/utilities.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a><ul class='methods'><li data-type='method'><a href="App.html#addType">addType</a></li></ul></li><li><a href="Berryfi.html">Berryfi</a><ul class='methods'><li data-type='method'><a href="Berryfi.html#pull">pull</a></li><li data-type='method'><a href="Berryfi.html#req">req</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#filter">filter</a></li><li data-type='method'><a href="Collection.html#find">find</a></li><li data-type='method'><a href="Collection.html#map">map</a></li></ul></li><li><a href="Entity.html">Entity</a><ul class='methods'><li data-type='method'><a href="Entity.html#toObject">toObject</a></li></ul></li><li><a href="Field.html">Field</a><ul class='methods'><li data-type='method'><a href="Field.html#toObject">toObject</a></li><li data-type='method'><a href="Field.html#validateProperties">validateProperties</a></li></ul></li><li><a href="PrimitiveField.html">PrimitiveField</a><ul class='methods'><li data-type='method'><a href="PrimitiveField.html#toFibery">toFibery</a></li></ul></li><li><a href="Type.html">Type</a><ul class='methods'><li data-type='method'><a href="Type.html#addField">addField</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#RestrictedAppNames">RestrictedAppNames</a></li><li><a href="global.html#toFibery">toFibery</a></li><li><a href="global.html#types">types</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">misc/utilities.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+
+/**
+ * Returns an object that follows Fibery's naming conventions
+ * @param {Array&lt;object>|object} data The data to return as Fibery naming convention
+ * @returns {object}
+ */
+function toFibery(data) {
+	if (!data) throw new Error("Missing the data to check");
+	if (Array.isArray(data)) {
+		return meta.map(prop => {
+			const d = Object();
+			if (prop.secured !== undefined) d["fibery/secured?"] = prop.secured;
+			if (prop.title !== undefined) d["ui/title?"] = prop.title;
+			if (prop.readonly !== undefined) d["fibery/readonly?"] = prop.readonly;
+			if (prop.hasId !== undefined) d["fibery/id?"] = prop.hasId;
+			if (prop.id !== undefined) d["fibery/id"] = prop.id;
+			if (prop.publicId !== undefined) d["fibery/public-id?"] = prop.publicId;
+			if (prop.creationDate !== undefined) d["fibery/creation-date?"] = prop.creationDate;
+			if (prop.collection !== undefined) d["fibery/collection?"] = prop.collection;
+			if (prop.required !== undefined) d["fibery/required?"] = prop.required;
+			if (prop.lookup !== undefined) d["fibery/lookup?"] = prop.lookup;
+			if (prop.domain !== undefined) d["fibery/domain?"] = prop.domain;
+			if (prop.hasFormula !== undefined) d["fibery/formula?"] = prop.hasFormula;
+			if (prop.formula !== undefined) d["fibery/formula"] = prop.formula;
+			if (prop.relation !== undefined) d["fibery/relation"] = prop.relation;
+			if (prop.defaultValue !== undefined) d["fibery/default-value"] = prop.defaultValue;
+			if (prop.objectEditorOrder !== undefined) d["fibery/ui/object-editor-order"] = prop.objectEditorOrder;
+			if (prop.precision !== undefined) d["fibery/precision"] = prop.precision;
+			if (prop.numberUnit !== undefined) d["fibery/number-unit"] = prop.numberUnit;
+			if (prop.mixinIcon !== undefined) d["ui/mixin-icon"] = prop.mixinIcon;
+			if (prop.isMixin !== undefined) d["app/mixin?"] = prop.isMixin;
+			if (prop.primitive !== undefined) d["fibery/primitive?"] = prop.primitive;
+			if (prop.mixins !== undefined) d["app/mixins"] = prop.mixins;
+			if (prop.enum !== undefined) d["fibery/enum?"] = prop.enum;
+			if (prop.showInMenu !== undefined) d["ui/show-in-menu?"] = prop.showInMenu;
+			if (prop.meta !== undefined) d["fibery/meta?"] = prop.meta;
+			if (prop.rankMixin !== undefined) d["fibery/rank-mixin"] = prop.rankMixin;
+			if (prop.collabDocuments !== undefined) d["Collaboration~Documents/ReferencesMixin"] = prop.collabDocuments;
+			if (prop.assignmentMixin !== undefined) d["fibery/assignments/assignments-mixin"] = prop.assignmentMixin;
+			if (prop.workflow !== undefined) d["workflow/workflow"] = prop.workflow;
+			if (prop.avatarMixin !== undefined) d["avatar/avatar-mixin"] = prop.avatarMixin;
+			return d;
+		});
+	} else if (data.constructor.name === "Object") {
+		const d = Object();
+		if (data.secured !== undefined) d["fibery/secured?"] = data.secured;
+		if (data.title !== undefined) d["ui/title?"] = data.title;
+		if (data.readonly !== undefined) d["fibery/readonly?"] = data.readonly;
+		if (data.hasId !== undefined) d["fibery/id?"] = data.hasId;
+		if (data.id !== undefined) d["fibery/id"] = data.id;
+		if (data.publicId !== undefined) d["fibery/public-id?"] = data.publicId;
+		if (data.creationDate !== undefined) d["fibery/creation-date?"] = data.creationDate;
+		if (data.collection !== undefined) d["fibery/collection?"] = data.collection;
+		if (data.required !== undefined) d["fibery/required?"] = data.required;
+		if (data.lookup !== undefined) d["fibery/lookup?"] = data.lookup;
+		if (data.domain !== undefined) d["fibery/domain?"] = data.domain;
+		if (data.hasFormula !== undefined) d["fibery/formula?"] = data.hasFormula;
+		if (data.formula !== undefined) d["fibery/formula"] = data.formula;
+		if (data.relation !== undefined) d["fibery/relation"] = data.relation;
+		if (data.defaultValue !== undefined) d["fibery/default-value"] = data.defaultValue;
+		if (data.objectEditorOrder !== undefined) d["fibery/ui/object-editor-order"] = data.objectEditorOrder;
+		if (data.precision !== undefined) d["fibery/precision"] = data.precision;
+		if (data.numberUnit !== undefined) d["fibery/number-unit"] = data.numberUnit;
+		if (data.mixinIcon !== undefined) d["ui/mixin-icon"] = data.mixinIcon;
+		if (data.isMixin !== undefined) d["app/mixin?"] = data.isMixin;
+		if (data.primitive !== undefined) d["fibery/primitive?"] = data.primitive;
+		if (data.mixins !== undefined) d["app/mixins"] = data.mixins;
+		if (data.enum !== undefined) d["fibery/enum?"] = data.enum;
+		if (data.showInMenu !== undefined) d["ui/show-in-menu?"] = data.showInMenu;
+		if (data.meta !== undefined) d["fibery/meta?"] = data.meta;
+		if (data.rankMixin !== undefined) d["fibery/rank-mixin"] = data.rankMixin;
+		if (data.collabDocuments !== undefined) d["Collaboration~Documents/ReferencesMixin"] = data.collabDocuments;
+		if (data.assignmentMixin !== undefined) d["fibery/assignments/assignments-mixin"] = data.assignmentMixin;
+		if (data.workflow !== undefined) d["workflow/workflow"] = data.workflow;
+		if (data.avatarMixin !== undefined) d["avatar/avatar-mixin"] = data.avatarMixin;
+		return d;
+	}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Jun 06 2020 20:24:34 GMT+0200 (GMT+02:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

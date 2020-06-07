@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>index.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a><ul class='methods'><li data-type='method'><a href="App.html#addType">addType</a></li></ul></li><li><a href="Berryfi.html">Berryfi</a><ul class='methods'><li data-type='method'><a href="Berryfi.html#pull">pull</a></li><li data-type='method'><a href="Berryfi.html#req">req</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#filter">filter</a></li><li data-type='method'><a href="Collection.html#find">find</a></li><li data-type='method'><a href="Collection.html#map">map</a></li></ul></li><li><a href="Entity.html">Entity</a><ul class='methods'><li data-type='method'><a href="Entity.html#toObject">toObject</a></li></ul></li><li><a href="Field.html">Field</a><ul class='methods'><li data-type='method'><a href="Field.html#toObject">toObject</a></li><li data-type='method'><a href="Field.html#validateProperties">validateProperties</a></li></ul></li><li><a href="PrimitiveField.html">PrimitiveField</a><ul class='methods'><li data-type='method'><a href="PrimitiveField.html#toFibery">toFibery</a></li></ul></li><li><a href="Type.html">Type</a><ul class='methods'><li data-type='method'><a href="Type.html#addField">addField</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#RestrictedAppNames">RestrictedAppNames</a></li><li><a href="global.html#toFibery">toFibery</a></li><li><a href="global.html#types">types</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const request = require("request-promise-native");
+const Fibery = require("fibery-unofficial");
+const Entity = require("fibery-unofficial/source/entity");
+const Field = require("fibery-unofficial/source/field");
+const Collection = require("./struct/Collection");
+const App = require("./struct/App");
+const { RestrictedAppNames } = require("./struct/constants");
+const { version, homepage } = require("../package.json");
+
+/**
+ * Represents a Berryfi client. Berryfi is a library built on top of the Unofficial Fibery client. Anything you can do with that client, you can do with this one as well.
+ * @description Berryfi is a library built on top of the Unofficial Fibery client (https://gitlab.com/fibery-community/unofficial-js-client/). Anything you can do with that client, you can do with this one as well.
+ * @extends {Fibery}
+ * @prop {Collection&lt;App>} apps A Collection of loaded apps from the user's workspace
+ * @prop {Class&lt;App>} App A class for creating new Apps
+ */
+class Berryfi extends Fibery {
+	/**
+	 * Creates a new Berryfi client
+	 * @param {string} token Your Fibery.io token. How to get your token on the Authentication of the Fibery API.
+	 * @param {string} host Your Fibery workspace domain. You can get this from the URL: https://{host name here}.fibery.io/
+	 * @see https://api.fibery.io/?shell#authentication
+	 * @example const Berryfi = require("Berryfi");
+	 * const berryfi = new Berryfi({
+	 * 	host: "somewhere.fibery.io",
+	 * 	token: "a1a1a1a1a1.b2b2b2b2b2b2b2b2b2b2b2b2b2"
+	 * });
+	 */
+	constructor({token, host}) {
+		super({token, host});
+		
+		this.__token = token;
+		this.__host = host;
+
+		this.__version = version;
+		this.__homepage = homepage;
+		this.App = App;
+		this.apps = new Collection();
+
+		// Proxy that allows Type.prop[Field Name] as getter and setter
+		this.prop = new Proxy(this, {
+			get: (target, property) => {
+				return this.apps.find(e => e.name.toLowerCase() === property.toLowerCase());
+			},
+			set: (target, property, value) => {
+				let found = this.apps.find(e => e.name.toLowerCase() === property.toLowerCase());
+				if (!found) throw new Error(`There's no Field by the name '${property}'`);
+				this.apps.set(found.name, value);
+			}
+		});
+	}
+
+	/**
+	 * Sends a request to Fibery and loads all the Apps, Types, and Fields the user has created automatically.
+	 * @returns {Promise}
+	 * @example await berryfi.pull();
+	 * console.info("Successfully loaded %s apps.", berryfi.apps.size)
+	 */
+	async pull() {
+		// Fetch types list from Fibery
+		let rawData = await Promise.resolve(this.req("/commands"));
+		if (!rawData) throw new Error("No data recieved from Fibery");
+		if (Array.isArray(rawData)) rawData = rawData[0];
+		this.apps = new Collection();
+
+		// Iterate over returned schemas and generate user defined Types
+		for(var i=0;i&lt;rawData["fibery/types"].length;i++) {
+			// Is a Fibery native type, skip
+			if (rawData["fibery/types"][i]["fibery/name"].startsWith("fibery/") || RestrictedAppNames.includes(rawData["fibery/types"][i]["fibery/name"].split("/")[0].toLowerCase())) continue;
+
+			const appId = rawData["fibery/types"][i]["fibery/name"].split("/")[0];
+			let app = this.apps.get(appId);
+
+			// Create new app if it doesn't exist
+			if (!app) {
+				app = new this.App(rawData["fibery/types"][i]["fibery/name"].split("/")[0]);
+				this.apps.set(app.name, app);
+			}
+
+			// Drop nested auxiliary Types
+			if (!rawData["fibery/types"][i]["fibery/meta"]["fibery/domain?"]) continue;
+
+			const typeId = rawData["fibery/types"][i]["fibery/id"];
+			let type = app.types.get(typeId);
+			
+			// Create new type if it doesn't exist
+			if (!type) {
+				type = new app.Type(rawData["fibery/types"][i]["fibery/id"], rawData["fibery/types"][i]);
+				app.types.set(type.name, type);
+			}
+		}
+	}
+
+	/**
+	 * Make an HTTP request to Fibery
+	 * @param {string} endpoint URL endpoint to send request to
+	 * @param {string} [method="POST"] The HTTP method to use
+	 * @returns {Promise&lt;object>}
+	 * @example const entity = await berryfi.req("/commands");
+	 */
+	async req(endpoint, method="POST") {
+		console.log(`Request: https://${this.__host}/api${endpoint}`);
+
+		let response = await request({
+			url: `https://${this.__host}/api${endpoint}`,
+			method: method,
+			headers: {
+				"Authorization": `Token ${this.__token}`,
+				"X-Client": `Berryfi ${this.__version}`,
+				"User-Agent": `Berryfi (${this.__homepage}, ${this.__version})`
+			},
+			json: [{ command: "fibery.schema/query" }]
+		});
+
+		const errors = response.reduce((acc, res, i) => {
+			if (!res.success) return acc.concat(`Error while executing command '${commands[i].command}': ${res.result.message}`);
+			else return acc;
+		}, []);
+
+		if (errors.length) throw new Error(errors.join('\n'));
+
+		return response.map(res => res.result);
+	}
+};
+
+// const brr = new Berryfi()
+
+module.exports = Berryfi;</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Jun 06 2020 20:24:34 GMT+0200 (GMT+02:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>struct/Entity.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a><ul class='methods'><li data-type='method'><a href="App.html#append">append</a></li><li data-type='method'><a href="App.html#toFibery">toFibery</a></li></ul></li><li><a href="BaseType.html">BaseType</a><ul class='methods'><li data-type='method'><a href="BaseType.html#toFibery">toFibery</a></li></ul></li><li><a href="Berryfi.html">Berryfi</a><ul class='methods'><li data-type='method'><a href="Berryfi.html#exec">exec</a></li><li data-type='method'><a href="Berryfi.html#pull">pull</a></li><li data-type='method'><a href="Berryfi.html#stentenceCase">stentenceCase</a></li><li data-type='method'><a href="Berryfi.html#toDate">toDate</a></li></ul></li><li><a href="Collection.html">Collection</a><ul class='methods'><li data-type='method'><a href="Collection.html#filter">filter</a></li><li data-type='method'><a href="Collection.html#find">find</a></li><li data-type='method'><a href="Collection.html#map">map</a></li></ul></li><li><a href="Entity.html">Entity</a><ul class='methods'><li data-type='method'><a href="Entity.html#findFieldName">findFieldName</a></li><li data-type='method'><a href="Entity.html#insert">insert</a></li><li data-type='method'><a href="Entity.html#pull">pull</a></li><li data-type='method'><a href="Entity.html#push">push</a></li><li data-type='method'><a href="Entity.html#toObject">toObject</a></li><li data-type='method'><a href="Entity.html#validate">validate</a></li></ul></li><li><a href="Field.html">Field</a><ul class='methods'><li data-type='method'><a href="Field.html#toFibery">toFibery</a></li></ul></li><li><a href="Type.html">Type</a><ul class='methods'><li data-type='method'><a href="Type.html#append">append</a></li><li data-type='method'><a href="Type.html#insert">insert</a></li><li data-type='method'><a href="Type.html#makeEntity">makeEntity</a></li><li data-type='method'><a href="Type.html#toFibery">toFibery</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Flags">Flags</a></li><li><a href="global.html#PRIMITIVE_FIELD_TYPES">PRIMITIVE_FIELD_TYPES</a></li><li><a href="global.html#RESTRICTED_APP_NAMES">RESTRICTED_APP_NAMES</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">struct/Entity.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { CMDS } = require("./constants");
+const Collection = require("./Collection");
+const Berryfi = require("../Berryfi");
+const BaseType = require("./BaseType");
+const Field = require("./Field");
+const App = require("./App");
+const Type = require("./Type");
+const uuid = require("uuid").v1;
+
+/**
+ * Represents an Entity / a collection of pieces of data, like a row in a table view, a person, or a card with information.
+ * @prop {Berryfi} berryfi The Berryfi client instance. Circular reference.
+ * @prop {Type} parentType The Type this Entity is a child of
+ * @prop {object} data The data on this Entity. Object is identical to the API query result.
+ * @prop {number} flag The flag value for this type
+ * @prop {string} field A proxy to get/set data in the current Entity. E.g. "entity.field['user email']" or "entity.field.Name = 'Hello!'". Setter throws error if field does not exist.
+ * @prop {Berryfi} berryfi The Berryfi client instance
+ */
+class Entity {
+	/**
+	 * Creates a new entity
+	 * @param {Berryfi} berryfi The Berryfi client instance
+	 * @param {Type} parentType The Type this Entity is a child of
+	 * @param {object} data The data to populate this entity
+	 */
+	constructor(berryfi, parentType, data) {
+		if (!data) throw new Error("Missing data");
+		if (!berryfi) throw new Error("Missing berryfi");
+		if (!berryfi.constructor.name === "Berryfi") throw new TypeError("'berryfi' parameter must be of the instance of Berryfi");
+		if (!parentType) throw new Error("Missing parentType");
+		if (!parentType.constructor.name === "Type") throw new TypeError("'parentType' parameter must be of the instance of Type");
+
+		this.berryfi = berryfi;
+		this.parentType = parentType;
+
+		this._data = data;
+
+		if (!this._data["fibery/id"]) this._data["fibery/id"] = uuid();
+
+		/**
+		 * The flags value for this thing. Is set when loaded by Berryfi.pull()
+		 * @type {number}
+		 * @public
+		 * @abstract
+		 */
+		this.flag = undefined;
+		this.field = new Proxy(this, {
+			get: (target, property) => {
+				let r = this.findFieldName(property);
+				return r &amp;&amp; this._data[r] ? this._data[r] : this._data[property] ? this._data[property] : this._data[this.berryfi.stentenceCase(property)] ? this._data[this.berryfi.stentenceCase(property)] : undefined;
+			},
+			set: (target, property, value) => {
+				let r = this.findFieldName(property);
+				if (!r) throw new Error(`Invalid property '${this.property}'. Valid ones are ${Object.keys(this.toObject()).join(", ")}`);
+				if (this.parentType.readOnly.has(r)) throw new Error(`The field '${r}' is read only`);
+				this._data[r] = value;
+			},
+			deleteProperty: (target, property) => {
+				let r = this.findFieldName(property);
+				delete this._data[r];
+				return true;
+			}
+		});
+
+		this.validate();
+	}
+
+	/**
+	 * Checks the Fields associated with this Entity's parent Type to resolve the Fibery name of a field
+	 * @param {string} name The field to get Fibery name of
+	 * @returns {string}
+	 */
+	findFieldName(name) {
+		if (!name) return undefined;
+
+		if (this.parentType.fieldNames.has(name)) return name;
+		for (let n of this.parentType.fieldNames.values()) if (n.toLowerCase().split("/")[1] === name.toLowerCase()) return n;
+
+		return undefined;
+	}
+
+	/**
+	 * Return the object data reference for this Entity
+	 * @public
+	 * @type {object}
+	 * @returns {object}
+	 */
+	get fields() {
+		return this._data;
+	}
+	/**
+	 * Boolean - Check if this is a user created App
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isApp() {
+		return !!(this.berryfi.flags.app &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Type inside an App
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isType() {
+		return !!(this.berryfi.flags.type &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a field inside a Type
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isField() {
+		return !!(this.berryfi.flags.field &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is an entity
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isEntity() {
+		return !!(this.berryfi.flags.entity &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this type is directly created by a user
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isUserCreated() {
+		return !!(this.berryfi.flags.userCreated &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Fibery helper type
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isAuxiliaryType() {
+		return !!(this.berryfi.flags.auxiliaryType &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Fibery helper field
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isAuxiliaryField() {
+		return !!(this.berryfi.flags.auxiliaryField &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a Fibery helper type or field
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isAuxiliary() {
+		return !!(this.berryfi.flags.auxiliaryField | this.berryfi.flags.auxiliaryType &amp; this.flag);
+	}
+	/**
+	 * Boolean - Check if this is a primitive Fibery type
+	 * @public
+	 * @type {boolean}
+	 * @returns {boolean}
+	 */
+	get isPrimitive() {
+		return !!(this.berryfi.flags.primitive &amp; this.flag);
+	}
+	/**
+	 * Number - Returns the Entity["fibery/rank"] value
+	 * @public
+	 * @type {number}
+	 * @returns {number}
+	 */
+	get rank() {
+		return this._data["fibery/rank"];
+	}
+	/**
+	 * String - Returns the Entity["fibery/public-id"] value
+	 * @public
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get publicId() {
+		return this._data["fibery/public-id"];
+	}
+	/**
+	 * Date - Returns the date the entity was modified
+	 * @returns {Date}
+	 * @type {Date}
+	 */
+	get modified() {
+		return this._data["fiber/modification-date"] ? new Date(this._data["fiber/modification-date"]) : null;
+	}
+	/**
+	 * Returns the UUID of this Entitiy if it has one
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get id() {
+		return this._data["fibery/id"];
+	}
+	/**
+	 * Returns the creation date of this Entitiy if it has an UUID
+	 * @type {Date}
+	 * @returns {Date}
+	 */
+	get created() {
+		return this.berryfi.toDate(this.id);
+	}
+	/**
+	 * Returns the name of the App this Entity is a child of. The name and label is the same for apps.
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get appName() {
+		return this.parentType.parentApp.label;
+	}
+	/**
+	 * Returns the name of the Type this Entity is a child of. The Fibery API name, not UI readable name.
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get typeName() {
+		return this.parentType.name;
+	}
+	/**
+	 * Returns the label of the Type this Entity is a child of. The UI readable name instead of the Fibery name.
+	 * @type {string}
+	 * @returns {string}
+	 */
+	get typeLabel() {
+		return this.parentType.label;
+	}
+
+	/**
+	 * Returns a pure object of the entity and its fields. Basically strips out `Appname/, fibery/, ui/, app/, etc..` to "clean up" the keys.
+	 * @param {object} [input] Default: the current entity's data. The data to convert from fibery notion to normal. Max 2 levels deep.
+	 * @returns {object}
+	 * @example console.log(personEntity); // {"fibery/id": "123", "fibery/name": "John Doe", "Person/age": 24, "Person/workplaces": [{"Companies/name": "Fibery"}], "fibery/public-id": "1"};
+	 * console.log(personEntity.toObject()); // {id: "123", name: "John Doe", age: 24, workplaces: [{name: "Fibery"}], "public-id": "1"};
+	 */
+	toObject(input) {
+		if (!input) input = this._data;
+		let o = Object();
+		for (let k in input) {
+			let nk = k.includes("/") ? k.split("/")[1] : k;
+			if (Array.isArray(input[k])) {
+				o[nk] = Array();
+				input[k].forEach(i =>
+					i.constructor.name === "Object" ?
+						Object.keys(i).forEach(sk => o[nk].push({ [sk.includes("/") ? sk.split("/")[1] : sk]: i[sk] }))
+						: o[nk].push(i));
+			} else if (input[k].constructor.name === "Object") {
+				o[nk] = {};
+				for (let sk in input[k]) o[nk][sk.includes("/") ? sk.split("/")[1] : sk] = input[k][sk];
+			} else o[nk] = input[k];
+		}
+		return o;
+	}
+
+	/**
+	 * Inserts this entity in to Fibery.
+	 * @async
+	 * @example const mike = people.makeEntity({
+	 * 	name: "Mike",
+	 * 	age: 24
+	 * });
+	 * await mike.insert(); // Create new
+	 * mike.field.email = "mike@email.com";
+	 * await mike.push(); // Update state
+	 */
+	async insert() {
+
+	}
+	
+
+	/**
+	 * Pulls the current state of this Entity from Fibery and update itself
+	 * @async
+	 */
+	async pull() {
+		let r = await this.berryfi.exec([{
+			command: CMDS.getEntity,
+			args: {
+				query: {
+					"q/from": this.parentType.name,
+					"q/where": ["==", ["fibery/id"], this.id],
+					"q/limit": 1,
+					"q/select": Object.keys(this.meta)
+				}
+			}
+		}]);
+
+		this._data = r.result[0];
+		this.validate();
+	}
+
+	/**
+	 * Push the current state of the entity to Fibery.
+	 * Undefined/omitted fields will be left out of the update, so they will remain as-is in Fibery.
+	 * Nulled values in this Entity will erase the values in Fibery.
+	 * @async
+	 * @return {Array&lt;object>} The result API response of the update query
+	 * @example 
+	 * mike.field.email = "mike@email.com";
+	 * await mike.push(); // Update state
+	 * mike.field.age = 25;
+	 * await mike.push() // … another update
+	 */
+	async push() {
+		// Dummy to avoid mutating reference
+		let holder = this.validate();
+
+		if (!this.parentType.readOnly.size) {
+			console.log("SHIT IS EMPTY AGAIN");
+			return;
+		}
+
+		// Remove 'undefined' fields
+		for (let key in holder) {
+			if (key==="fibery/id") continue;
+			if (this.parentType.readOnly.has(key)) delete holder[key];			
+			if (holder[key] === undefined) delete holder[key];
+		}
+
+		let r = await this.berryfi.exec([{
+			command: CMDS.updateEntity,
+			args: {
+				type: this.parentType.name,
+				entity: holder
+			}
+		}]);
+
+		return r;
+	}
+
+	/**
+	 * Corrects and checks if the schema is valid based on the field schema in cache. 
+	 * Updates its own state, but also return a de-referenced object of the object.
+	 * Throws on if invalid, with an error stating what is invalid. 
+	 * You can use this method in a try...catch before sending to capture errors early. 
+	 * When sending, this method will be used automatically as well.
+	 * @throws {Error} If invalid, with an error stating what is invalid.
+	 * @returns {object}
+	 */
+	validate() {
+		if (!this._data || !Object.keys(this._data).length) return;
+		let holder = Object();
+
+		for (let key in this._data) {
+			var k = this.findFieldName(key);
+			if (!k) throw new Error(`Unable to find field name for the key '${key}'.`);
+			holder[k] = this._data[key];
+		}
+		this._data = holder;
+		return JSON.parse(JSON.stringify(holder));
+	}
+};
+module.exports = Entity;</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Jun 07 2020 18:52:22 GMT+0200 (GMT+02:00) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
